@@ -8,7 +8,7 @@
 import UIKit
 
 class DetailViewController: UIViewController {
-    var user: User?
+    var viewModel: DetailViewModel!
     
     var onSave: ((User) -> Void)?
     
@@ -19,17 +19,19 @@ class DetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        idLabel.text = "ID: \(user?.id ?? 0)"
-        nameTextField.text = user?.name
-        emailTextField.text = user?.email
+        let user = viewModel.getuser()
+        
+        idLabel.text = "ID: \(user.id)"
+        nameTextField.text = user.name
+        emailTextField.text = user.email
     }
     
     @IBAction func saveButtonTapped(_ sender: UIButton) {
         
-        guard var updatedUser = user else { return }
-        
-        updatedUser.name = nameTextField.text ?? ""
-        updatedUser.email = emailTextField.text ?? ""
+        let updatedUser = viewModel.updateUser(
+                    name: nameTextField.text ?? "",
+                    email: emailTextField.text ?? ""
+                )
         
         onSave?(updatedUser)
         
